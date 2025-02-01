@@ -1,5 +1,5 @@
 // This class is used for encrypting or decrypting strings using character mapping
-public class Cipher   
+public class Cipher
 {
     // Strings for keeping the alphabets, one for the original letters and the other for the encrypted ones
     // encryption involves mapping from original to cipher, for each letter we locate the character in the
@@ -13,21 +13,27 @@ public class Cipher
         String outputString = "";
         
         // for all chars in the input string
-        for (int i = 0; i < inputString.length(); i++)   
+        for (int i = 0; i < inputString.length(); i++)
         {
-
+            int index = ORIGINAL_ALPHABET.indexOf(inputString.charAt(i)); //find the index of current char
+            if (index != -1) { //character found in the alphabet
+                outputString += CIPHER_ALPHABET.charAt(index);
+            } else {
+                outputString += inputString.charAt(i); //keep the elements which are not in the alphabet
+            }
         }
 
         return outputString;
     }
 
     public String decrypt(String inputString) {
-        
-        // output string will be collected in this variable, one char at a time
         String outputString = "";
-        
-        replaceChar('a',true);
-        
+
+        for (int i = 0; i < inputString.length(); i++) {
+            char decryptedChar = replaceChar(inputString.charAt(i), false);
+            outputString += decryptedChar;
+        }
+
         return outputString;
     }
 
@@ -37,25 +43,26 @@ public class Cipher
     // works only when the input char is included in our alphabet variables
     // should not replace symbols or upper case letters, return input char in those cases
     private char replaceChar(char inputChar, boolean isEncrypt) {
-        
-        if(isEncrypt) {
-            for (int i = 0; i < ORIGINAL_ALPHABET.length(); i++)   
-            {
-                if(ORIGINAL_ALPHABET.charAt(i) == inputChar) {
-
+        if (Character.isLowerCase(inputChar)) {
+            if(isEncrypt) {
+                for (int i = 0; i < ORIGINAL_ALPHABET.length(); i++)   
+                {
+                    if(ORIGINAL_ALPHABET.charAt(i) == inputChar) {
+                        return CIPHER_ALPHABET.charAt(i); // Return the encrypted character
+                    }
                 }
             }
-        }
-        else {
-            for (int i = 0; i < CIPHER_ALPHABET.length(); i++)   
-            {
-                if(CIPHER_ALPHABET.charAt(i) == inputChar) {
-                    return ORIGINAL_ALPHABET.charAt(i);
+            else {
+                for (int i = 0; i < CIPHER_ALPHABET.length(); i++)   
+                {
+                    if(CIPHER_ALPHABET.charAt(i) == inputChar) {
+                        return ORIGINAL_ALPHABET.charAt(i); // Return the decrypted character
+                    }
                 }
-            }
+            } 
         }
         
         // if we did not find it in the alphabet, then return the original char
         return inputChar;
     }
-}   
+}
